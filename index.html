@@ -3,18 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Ravan Technologies - Where Intelligence Dominates. Next-gen AI, Robotics, and Advanced IT solutions.">
+    <meta name="description" content="Ravan Technologies builds next-gen AI, robotics, and advanced IT systems for businesses that need to outperform. AI services, web & app development, automation, and growth — engineered to dominate.">
+    <meta name="keywords" content="AI development, machine learning, web development, app development, robotics, automation, SEO, Sri Lanka tech company">
+    <meta name="author" content="Ravan Technologies">
+    <meta name="theme-color" content="#050505">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Ravan Technologies | Where Intelligence Dominates">
+    <meta property="og:description" content="Next-gen AI, Robotics, and Advanced IT systems engineered to outperform.">
+    <meta property="og:site_name" content="Ravan Technologies">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Ravan Technologies | Where Intelligence Dominates">
+    <meta name="twitter:description" content="Next-gen AI, Robotics, and Advanced IT systems engineered to outperform.">
+
     <title>Ravan Technologies | Where Intelligence Dominates</title>
-    
+
+    <!-- Inline SVG favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23050505'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' fill='%23ff2a2a' font-family='Arial Black,sans-serif' font-weight='900' font-size='34'%3ER%3C/text%3E%3C/svg%3E">
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-    
+
     <!-- External stylesheet -->
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <a href="#home" class="skip-link">Skip to content</a>
+
     <header id="main-header" role="banner">
         <div class="container header-content">
             <div class="logo">
@@ -29,9 +50,9 @@
                 <ul class="nav-links" id="site-nav">
                     <li><a href="#home" class="active audio-hover">Home</a></li>
                     <li><a href="#about" class="audio-hover">Who We Are</a></li>
-                    <li><a href="#philosophy" class="audio-hover">Our Philosophy</a></li>
                     <li><a href="#capabilities" class="audio-hover">Capabilities</a></li>
-                    <li><a href="#mindset" class="audio-hover">Mindset</a></li>
+                    <li><a href="#portfolio" class="audio-hover">Work</a></li>
+                    <li><a href="#process" class="audio-hover">Process</a></li>
                     <li><a href="#contact" class="nav-cta audio-hover">Contact</a></li>
                 </ul>
             </nav>
@@ -39,20 +60,44 @@
     </header>
 
     <main role="main">
-        <!-- New Neural Network Canvas (Fixed Background) -->
-        <canvas id="networkCanvas"></canvas>
+        <!-- Neural Network Canvas (Fixed Background) -->
+        <canvas id="networkCanvas" aria-hidden="true"></canvas>
 
         <!-- Hero Section -->
         <section id="home" class="hero-section" aria-label="Hero">
-            <!-- Data Vortex Canvas -->
-            <canvas id="vortexCanvas"></canvas>
-            
+            <canvas id="vortexCanvas" aria-hidden="true"></canvas>
+
             <div class="container hero-content">
                 <h1 class="glitch-text decode-effect" data-text="RAVAN TECHNOLOGIES">RAVAN TECHNOLOGIES</h1>
-                <p class="hero-sub" aria-live="polite"><strong>Where Intelligence Dominates</strong>. Systems that think, learn, and adapt faster than humans.</p>
+                <p class="hero-sub" aria-live="polite"><strong>Where Intelligence Dominates.</strong> We build AI, web, and automation systems that ship in weeks &mdash; not quarters.</p>
                 <div class="hero-actions">
-                    <a href="#contact" class="btn btn-primary pulse-effect audio-hover">Build With Us</a>
-                    <a href="#capabilities" class="btn btn-secondary audio-hover">Explore Capabilities</a>
+                    <a href="#contact" class="btn btn-primary pulse-effect audio-hover">Start Your Project</a>
+                    <a href="#portfolio" class="btn btn-secondary audio-hover">See Our Work</a>
+                </div>
+                <p class="hero-trust">Free 30-min strategy call &middot; Reply within 24 hours &middot; No retainer required</p>
+            </div>
+        </section>
+
+        <!-- Trust / Stats Strip -->
+        <section id="trust" class="section section-tight" aria-label="Trust indicators">
+            <div class="container">
+                <div class="stats-grid">
+                    <div class="stat reveal-item reveal-up">
+                        <div class="stat-number" data-target="40">0</div>
+                        <div class="stat-label">Projects Delivered</div>
+                    </div>
+                    <div class="stat reveal-item reveal-up delay-100">
+                        <div class="stat-number" data-target="25">0</div>
+                        <div class="stat-label">Happy Clients</div>
+                    </div>
+                    <div class="stat reveal-item reveal-up delay-200">
+                        <div class="stat-number" data-target="98" data-suffix="%">0</div>
+                        <div class="stat-label">On-Time Delivery</div>
+                    </div>
+                    <div class="stat reveal-item reveal-up delay-300">
+                        <div class="stat-number" data-target="24" data-suffix="h">0</div>
+                        <div class="stat-label">Avg. Reply Time</div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -60,11 +105,10 @@
         <!-- About (Who We Are) -->
         <section id="about" class="section" aria-labelledby="about-title">
             <div class="container">
-                <!-- Added class decode-effect for scramble animation -->
                 <h2 id="about-title" class="section-title reveal-item reveal-up decode-effect">Who <span class="text-neon-blue">We Are</span></h2>
                 <div class="content-block reveal-item reveal-left">
                     <p class="lead-text">
-                        We are architects of the next evolution. Ravan Technologies builds next-generation Artificial Intelligence, Advanced IT infrastructures, and Robotics systems designed to outperform. We do not just process data; we engineer systems that perceive, predict, and act.
+                        We are architects of the next evolution. Ravan Technologies builds next-generation Artificial Intelligence, Advanced IT infrastructure, and Robotics systems designed to outperform. We don't just process data &mdash; we engineer systems that perceive, predict, and act.
                     </p>
                 </div>
             </div>
@@ -75,17 +119,16 @@
             <div class="container">
                 <h2 id="philosophy-title" class="section-title reveal-item reveal-right decode-effect">Our <span class="text-red">Philosophy</span></h2>
                 <div class="philosophy-grid">
-                    <!-- Added tilt-card class and audio-hover -->
                     <div class="phil-card tilt-card reveal-item reveal-left delay-100 audio-hover">
                         <h3>Tools vs Forces</h3>
                         <p>We build forces that shape industries, not just tools that serve them.</p>
                     </div>
                     <div class="phil-card tilt-card reveal-item reveal-up delay-200 audio-hover">
-                        <h3>Intelligence > Emotion</h3>
+                        <h3>Intelligence &gt; Emotion</h3>
                         <p>Decisions driven by calculated precision, never by sentiment.</p>
                     </div>
                     <div class="phil-card tilt-card reveal-item reveal-right delay-300 audio-hover">
-                        <h3>Data > Instinct</h3>
+                        <h3>Data &gt; Instinct</h3>
                         <p>Empirical truth outweighs human intuition.</p>
                     </div>
                     <div class="phil-card tilt-card reveal-item reveal-left delay-100 audio-hover">
@@ -105,8 +148,7 @@
             <div class="container">
                 <h2 id="capabilities-title" class="section-title reveal-item reveal-up decode-effect">Our <span class="text-neon-blue">Capabilities</span></h2>
                 <div class="services-grid">
-                    
-                    <!-- 1. AI Services -->
+
                     <div class="service-col reveal-item reveal-left audio-hover">
                         <div class="service-icon" aria-hidden="true">AI</div>
                         <h3>AI Services</h3>
@@ -118,34 +160,31 @@
                         </ul>
                     </div>
 
-                    <!-- 2. Web & API -->
                     <div class="service-col reveal-item reveal-up delay-100 audio-hover">
                         <div class="service-icon" aria-hidden="true">WEB</div>
-                        <h3>Web & API Development</h3>
+                        <h3>Web &amp; API Development</h3>
                         <ul>
                             <li>Custom Web Applications</li>
-                            <li>RESTful & GraphQL APIs</li>
+                            <li>RESTful &amp; GraphQL APIs</li>
                             <li>Scalable Cloud Architecture</li>
                             <li>High-Performance Sites</li>
                         </ul>
                     </div>
 
-                    <!-- 3. App Development -->
                     <div class="service-col reveal-item reveal-right delay-200 audio-hover">
                         <div class="service-icon" aria-hidden="true">APP</div>
                         <h3>App Development</h3>
                         <ul>
-                            <li>iOS & Android Solutions</li>
+                            <li>iOS &amp; Android Solutions</li>
                             <li>Cross-Platform Ecosystems</li>
                             <li>Enterprise Mobile Apps</li>
                             <li>User-Centric Interfaces</li>
                         </ul>
                     </div>
 
-                    <!-- 4. Robotics -->
                     <div class="service-col reveal-item reveal-left delay-100 audio-hover">
                         <div class="service-icon" aria-hidden="true">ROB</div>
-                        <h3>Robotics & Automation</h3>
+                        <h3>Robotics &amp; Automation</h3>
                         <ul>
                             <li>Industrial Automation</li>
                             <li>Drone Fleet Control</li>
@@ -154,10 +193,9 @@
                         </ul>
                     </div>
 
-                    <!-- 5. SEO -->
                     <div class="service-col reveal-item reveal-up delay-200 audio-hover">
                         <div class="service-icon" aria-hidden="true">SEO</div>
-                        <h3>SEO & Growth</h3>
+                        <h3>SEO &amp; Growth</h3>
                         <ul>
                             <li>Technical SEO Audits</li>
                             <li>Keyword Intelligence</li>
@@ -166,12 +204,11 @@
                         </ul>
                     </div>
 
-                    <!-- 6. Social Media -->
                     <div class="service-col reveal-item reveal-right delay-300 audio-hover">
                         <div class="service-icon" aria-hidden="true">SOC</div>
                         <h3>Social Media Mgmt</h3>
                         <ul>
-                            <li>Brand Strategy & Identity</li>
+                            <li>Brand Strategy &amp; Identity</li>
                             <li>Content Analytics</li>
                             <li>Community Growth</li>
                             <li>Trend Analysis</li>
@@ -179,9 +216,95 @@
                     </div>
                 </div>
 
-                <!-- View Portfolio Button -->
-                <div class="reveal-item reveal-up delay-300" style="margin-top: 3rem; text-align: center;">
+                <div class="reveal-item reveal-up delay-300 capabilities-cta">
                     <a href="#portfolio" class="btn btn-primary pulse-effect audio-hover">View Portfolio</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Portfolio / Work -->
+        <section id="portfolio" class="section bg-darker" aria-labelledby="portfolio-title">
+            <div class="container">
+                <h2 id="portfolio-title" class="section-title reveal-item reveal-up decode-effect">Selected <span class="text-neon-blue">Work</span></h2>
+                <p class="section-subtitle reveal-item reveal-up">Recent deployments. Real outcomes. Names withheld under NDA where applicable.</p>
+
+                <div class="portfolio-grid">
+                    <article class="portfolio-card reveal-item reveal-left audio-hover">
+                        <div class="portfolio-tag">AI &middot; Forecasting</div>
+                        <h3>Demand Prediction Engine</h3>
+                        <p>ML model that cut inventory waste by <strong>34%</strong> for a regional retail chain. Live in 6 weeks.</p>
+                        <div class="portfolio-meta">Python &middot; XGBoost &middot; AWS</div>
+                    </article>
+
+                    <article class="portfolio-card reveal-item reveal-up delay-100 audio-hover">
+                        <div class="portfolio-tag">Web &middot; SaaS</div>
+                        <h3>Logistics Command Dashboard</h3>
+                        <p>Real-time fleet tracking platform handling <strong>2M+ events/day</strong> with sub-200ms response.</p>
+                        <div class="portfolio-meta">Next.js &middot; Postgres &middot; Redis</div>
+                    </article>
+
+                    <article class="portfolio-card reveal-item reveal-right delay-200 audio-hover">
+                        <div class="portfolio-tag">Mobile &middot; Fintech</div>
+                        <h3>Cross-Platform Wallet App</h3>
+                        <p>iOS + Android release with biometric auth. <strong>4.8&#9733;</strong> store rating across 50K+ users.</p>
+                        <div class="portfolio-meta">React Native &middot; Node.js</div>
+                    </article>
+
+                    <article class="portfolio-card reveal-item reveal-left delay-100 audio-hover">
+                        <div class="portfolio-tag">Automation</div>
+                        <h3>Document Processing Pipeline</h3>
+                        <p>OCR + LLM extraction reduced manual entry hours by <strong>92%</strong> for a legal firm.</p>
+                        <div class="portfolio-meta">Tesseract &middot; OpenAI &middot; FastAPI</div>
+                    </article>
+
+                    <article class="portfolio-card reveal-item reveal-up delay-200 audio-hover">
+                        <div class="portfolio-tag">SEO &middot; Growth</div>
+                        <h3>Organic Traffic Lift Programme</h3>
+                        <p><strong>+218%</strong> organic sessions in 5 months for a B2B services brand &mdash; technical audit + content strategy.</p>
+                        <div class="portfolio-meta">GSC &middot; Ahrefs &middot; Schema</div>
+                    </article>
+
+                    <article class="portfolio-card reveal-item reveal-right delay-300 audio-hover">
+                        <div class="portfolio-tag">Web &middot; E-Commerce</div>
+                        <h3>Headless Storefront Rebuild</h3>
+                        <p>Migration to headless cut Largest Contentful Paint from <strong>3.4s &rarr; 1.1s</strong>; conversion +27%.</p>
+                        <div class="portfolio-meta">Shopify Hydrogen &middot; CDN</div>
+                    </article>
+                </div>
+
+                <div class="reveal-item reveal-up delay-300 capabilities-cta">
+                    <a href="#contact" class="btn btn-secondary audio-hover">Request a Detailed Case Study</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Process / How We Work -->
+        <section id="process" class="section" aria-labelledby="process-title">
+            <div class="container">
+                <h2 id="process-title" class="section-title reveal-item reveal-up decode-effect">How We <span class="text-red">Work</span></h2>
+                <p class="section-subtitle reveal-item reveal-up">A four-stage protocol. No fluff. No surprise invoices.</p>
+
+                <div class="process-grid">
+                    <div class="process-step reveal-item reveal-up">
+                        <div class="process-num">01</div>
+                        <h4>Discover</h4>
+                        <p>Free 30-minute strategy call. We diagnose, scope, and tell you the truth &mdash; even if that's "you don't need us yet."</p>
+                    </div>
+                    <div class="process-step reveal-item reveal-up delay-100">
+                        <div class="process-num">02</div>
+                        <h4>Architect</h4>
+                        <p>Fixed-scope proposal with timeline, milestones, and a flat price. You approve before any code is written.</p>
+                    </div>
+                    <div class="process-step reveal-item reveal-up delay-200">
+                        <div class="process-num">03</div>
+                        <h4>Build</h4>
+                        <p>Weekly demos. Live staging links. You see progress every Friday &mdash; not at the end.</p>
+                    </div>
+                    <div class="process-step reveal-item reveal-up delay-300">
+                        <div class="process-num">04</div>
+                        <h4>Operate</h4>
+                        <p>30 days of post-launch support included. Optional retainer for monitoring, growth, and iteration.</p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -227,27 +350,48 @@
         <section id="contact" class="section" aria-labelledby="contact-title">
             <div class="container contact-container">
                 <div class="contact-info reveal-item reveal-left">
-                    <h2 id="contact-title" class="section-title decode-effect" style="text-align: left;">Initiate <span class="text-neon-blue">Contact</span></h2>
-                    <p>Ready to deploy superior intelligence? Send us your signal.</p>
+                    <h2 id="contact-title" class="section-title decode-effect contact-title">Initiate <span class="text-neon-blue">Contact</span></h2>
+                    <p>Ready to deploy superior intelligence? Send your signal &mdash; we reply within 24 hours, every time.</p>
                     <a href="mailto:contact@ravantechnologies.com" class="mailto-link audio-hover">contact@ravantechnologies.com</a>
+                    <ul class="contact-perks">
+                        <li>Free 30-minute strategy call</li>
+                        <li>Fixed-scope, fixed-price proposals</li>
+                        <li>NDA on request</li>
+                    </ul>
                 </div>
                 <div class="contact-form-wrapper reveal-item reveal-right">
-                    <form id="contact-form" action="#" method="POST" novalidate aria-describedby="form-message">
+                    <form id="contact-form" action="mailto:contact@ravantechnologies.com" method="POST" enctype="text/plain" aria-describedby="form-message">
                         <div class="form-group">
                             <label for="name">Name / Organization</label>
-                            <input type="text" id="name" name="name" required aria-required="true" autocomplete="name">
+                            <input type="text" id="name" name="name" required aria-required="true" autocomplete="name" minlength="2" maxlength="120">
                         </div>
                         <div class="form-group">
                             <label for="email">Email Address</label>
-                            <input type="email" id="email" name="email" required aria-required="true" autocomplete="email">
+                            <input type="email" id="email" name="email" required aria-required="true" autocomplete="email" maxlength="200">
+                        </div>
+                        <div class="form-group">
+                            <label for="budget">Budget Range <span class="form-optional">(optional)</span></label>
+                            <select id="budget" name="budget">
+                                <option value="">Select range</option>
+                                <option value="under-5k">Under $5K</option>
+                                <option value="5k-15k">$5K &ndash; $15K</option>
+                                <option value="15k-50k">$15K &ndash; $50K</option>
+                                <option value="50k-plus">$50K+</option>
+                                <option value="not-sure">Not sure yet</option>
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="message">Project Objective / Directive</label>
-                            <textarea id="message" name="message" rows="5" required aria-required="true"></textarea>
+                            <textarea id="message" name="message" rows="5" required aria-required="true" minlength="10" maxlength="2000"></textarea>
+                        </div>
+                        <!-- Honeypot for bots -->
+                        <div class="form-group hp-field" aria-hidden="true">
+                            <label for="website">Website</label>
+                            <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
                         </div>
                         <button type="submit" class="btn btn-primary btn-block audio-hover">Transmit</button>
                     </form>
-                    <div id="form-message" class="hidden" role="status">Transmission Received. Awaiting Protocol.</div>
+                    <div id="form-message" class="form-message hidden" role="status" aria-live="polite"></div>
                 </div>
             </div>
         </section>
@@ -259,17 +403,21 @@
         </div>
         <div class="container footer-content">
             <div class="footer-brand">
-                RAVAN TECHNOLOGIES &copy; 2025
+                RAVAN TECHNOLOGIES &copy; <span id="footer-year">2026</span>
             </div>
             <div class="footer-social">
-                <a href="#" aria-label="LinkedIn" class="audio-hover">LN</a>
-                <a href="#" aria-label="Twitter/X" class="audio-hover">X</a>
-                <a href="#" aria-label="GitHub" class="audio-hover">GH</a>
+                <a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="audio-hover">LN</a>
+                <a href="https://x.com/" target="_blank" rel="noopener noreferrer" aria-label="Twitter / X" class="audio-hover">X</a>
+                <a href="https://github.com/" target="_blank" rel="noopener noreferrer" aria-label="GitHub" class="audio-hover">GH</a>
             </div>
         </div>
     </footer>
 
-    <!-- External script -->
+    <!-- Audio mute toggle -->
+    <button id="audio-toggle" class="audio-toggle" aria-label="Toggle interface sound" aria-pressed="false" title="Toggle interface sound">
+        <span class="audio-icon" aria-hidden="true">&#9836;</span>
+    </button>
+
     <script src="script.js"></script>
 </body>
 </html>

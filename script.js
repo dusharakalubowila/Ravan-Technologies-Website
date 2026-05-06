@@ -1,15 +1,32 @@
 document.addEventListener('DOMContentLoaded', () => {
-            
+
+    // --- Shared utilities ---
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function debounce(fn, wait) {
+        let t;
+        return function (...args) {
+            clearTimeout(t);
+            t = setTimeout(() => fn.apply(this, args), wait);
+        };
+    }
+
+    // Track whether the document is visible — RAF loops pause when hidden
+    let docVisible = !document.hidden;
+    document.addEventListener('visibilitychange', () => {
+        docVisible = !document.hidden;
+    });
+
+
     // --- 1. DATA VORTEX ANIMATION (Hero) ---
     const canvas = document.getElementById('vortexCanvas');
-    if (canvas) {
+    if (canvas && !prefersReducedMotion) {
         const ctx = canvas.getContext('2d');
         let width, height, centerX, centerY;
         let particles = [];
-        
-        // Configuration
-        const particleCount = 400; // Number of particles
-        const speedBase = 15; // Base speed of travel
+
+        const particleCount = 400;
+        const speedBase = 15;
         const colorRed = '#ff2a2a';
         const colorBlue = '#2a8dff';
 
@@ -19,33 +36,27 @@ document.addEventListener('DOMContentLoaded', () => {
             centerX = width / 2;
             centerY = height / 2;
         }
-        window.addEventListener('resize', resize);
+        window.addEventListener('resize', debounce(resize, 150));
         resize();
 
         class Particle {
-            constructor() {
-                this.reset(true);
-            }
-
+            constructor() { this.reset(true); }
             reset(initial = false) {
                 this.x = (Math.random() - 0.5) * width * 2;
                 this.y = (Math.random() - 0.5) * height * 2;
                 this.z = initial ? Math.random() * 2000 : 2000;
                 this.prevZ = this.z;
                 this.color = Math.random() > 0.5 ? colorRed : colorBlue;
-                this.speed = speedBase + Math.random() * 5; 
+                this.speed = speedBase + Math.random() * 5;
             }
-
             update() {
                 this.prevZ = this.z;
                 this.z -= this.speed;
-
                 if (this.z <= 1) {
                     this.reset();
-                    this.prevZ = this.z; 
+                    this.prevZ = this.z;
                 }
             }
-
             draw() {
                 const focalLength = 250;
                 const sx = (this.x / this.z) * focalLength + centerX;
@@ -62,44 +73,37 @@ document.addEventListener('DOMContentLoaded', () => {
                 ctx.moveTo(px, py);
                 ctx.lineTo(sx, sy);
                 ctx.stroke();
-                
+
                 ctx.fillStyle = this.color;
                 ctx.beginPath();
-                ctx.arc(sx, sy, size/2, 0, Math.PI * 2);
+                ctx.arc(sx, sy, size / 2, 0, Math.PI * 2);
                 ctx.fill();
             }
         }
 
-        function initParticles() {
-            particles = [];
-            for (let i = 0; i < particleCount; i++) {
-                particles.push(new Particle());
-            }
-        }
+        for (let i = 0; i < particleCount; i++) particles.push(new Particle());
 
         function animate() {
-            // Motion Blur Effect with Dark Background
-            ctx.fillStyle = 'rgba(2, 2, 5, 0.3)'; 
-            ctx.fillRect(0, 0, width, height);
-
-            for (let p of particles) {
-                p.update();
-                p.draw();
+            if (docVisible) {
+                ctx.fillStyle = 'rgba(2, 2, 5, 0.3)';
+                ctx.fillRect(0, 0, width, height);
+                for (const p of particles) {
+                    p.update();
+                    p.draw();
+                }
             }
-            
             requestAnimationFrame(animate);
         }
-
-        initParticles();
         animate();
     }
 
-    // --- 2. NEURAL NETWORK BACKGROUND (Lower Sections) ---
+
+    // --- 2. NEURAL NETWORK BACKGROUND ---
     const netCanvas = document.getElementById('networkCanvas');
-    if (netCanvas) {
+    if (netCanvas && !prefersReducedMotion) {
         const ctx = netCanvas.getContext('2d');
         let w, h;
-        let netParticles = [];
+        const netParticles = [];
         const netCount = 60;
         const connectionDistance = 150;
 
@@ -107,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
             w = netCanvas.width = window.innerWidth;
             h = netCanvas.height = window.innerHeight;
         }
-        window.addEventListener('resize', resizeNet);
+        window.addEventListener('resize', debounce(resizeNet, 150));
         resizeNet();
 
         class NetParticle {
@@ -132,182 +136,196 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        for(let i=0; i<netCount; i++) netParticles.push(new NetParticle());
+        for (let i = 0; i < netCount; i++) netParticles.push(new NetParticle());
 
         function animateNet() {
-            ctx.clearRect(0, 0, w, h);
-            
-            // Draw connections first
-            for (let i = 0; i < netParticles.length; i++) {
-                for (let j = i; j < netParticles.length; j++) {
-                    const dx = netParticles[i].x - netParticles[j].x;
-                    const dy = netParticles[i].y - netParticles[j].y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-
-                    if (distance < connectionDistance) {
-                        ctx.beginPath();
-                        ctx.strokeStyle = `rgba(50, 50, 50, ${1 - distance / connectionDistance})`;
-                        ctx.lineWidth = 1;
-                        ctx.moveTo(netParticles[i].x, netParticles[i].y);
-                        ctx.lineTo(netParticles[j].x, netParticles[j].y);
-                        ctx.stroke();
+            if (docVisible) {
+                ctx.clearRect(0, 0, w, h);
+                for (let i = 0; i < netParticles.length; i++) {
+                    for (let j = i; j < netParticles.length; j++) {
+                        const dx = netParticles[i].x - netParticles[j].x;
+                        const dy = netParticles[i].y - netParticles[j].y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        if (distance < connectionDistance) {
+                            ctx.beginPath();
+                            ctx.strokeStyle = `rgba(50, 50, 50, ${1 - distance / connectionDistance})`;
+                            ctx.lineWidth = 1;
+                            ctx.moveTo(netParticles[i].x, netParticles[i].y);
+                            ctx.lineTo(netParticles[j].x, netParticles[j].y);
+                            ctx.stroke();
+                        }
                     }
+                    netParticles[i].update();
+                    netParticles[i].draw();
                 }
-                netParticles[i].update();
-                netParticles[i].draw();
             }
             requestAnimationFrame(animateNet);
         }
         animateNet();
     }
 
-    // --- 3. SCRAMBLE TEXT DECODER EFFECT ---
-    // Characters to use for scrambling
+
+    // --- 3. SCRAMBLE TEXT DECODER ---
     const hackerChars = '!<>-_\\/[]{}—=+*^?#________';
-    
+
     function scrambleText(element) {
-        // Store original HTML to preserve spans like <span class="text-neon-blue">
+        if (prefersReducedMotion) return;
         const originalHTML = element.innerHTML;
         const originalText = element.innerText;
         const length = originalText.length;
         let iterations = 0;
-        
-        // We will animate the text content for the effect, 
-        // but at the end, restore the innerHTML to keep colors.
-        
+
         const interval = setInterval(() => {
             element.innerText = originalText
                 .split("")
                 .map((letter, index) => {
-                    if(index < iterations) {
-                        return originalText[index];
-                    }
+                    if (index < iterations) return originalText[index];
                     return hackerChars[Math.floor(Math.random() * hackerChars.length)];
                 })
                 .join("");
-            
-            if(iterations >= length) {
+
+            if (iterations >= length) {
                 clearInterval(interval);
-                element.innerHTML = originalHTML; // Restore colors/spans
+                element.innerHTML = originalHTML;
             }
-            
-            iterations += 1 / 2; // Speed of decode
+            iterations += 1 / 2;
         }, 30);
     }
 
-    // Observe headers for scramble effect
-    const scrambleObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if(entry.isIntersecting) {
-                // Only scramble if it hasn't been done (or do it every time if preferred)
-                // Here we do it every time it scrolls into view for effect
-                scrambleText(entry.target);
-                scrambleObserver.unobserve(entry.target); // Do once per load
-            }
+    if ('IntersectionObserver' in window) {
+        const scrambleObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    scrambleText(entry.target);
+                    scrambleObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+        document.querySelectorAll('.decode-effect').forEach(el => scrambleObserver.observe(el));
+    }
+
+
+    // --- 4. HOLOGRAPHIC 3D TILT ---
+    if (!prefersReducedMotion && window.matchMedia('(hover: hover)').matches) {
+        document.querySelectorAll('.tilt-card, .service-col').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const cx = rect.width / 2;
+                const cy = rect.height / 2;
+                const rotateX = ((y - cy) / cy) * -5;
+                const rotateY = ((x - cx) / cx) * 5;
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg)`;
+            });
         });
-    }, { threshold: 0.5 });
-
-    document.querySelectorAll('.decode-effect').forEach(el => scrambleObserver.observe(el));
+    }
 
 
-    // --- 4. HOLOGRAPHIC 3D TILT EFFECT ---
-    // Applied to .tilt-card (Philosophy) and .service-col (Capabilities)
-    const tiltElements = document.querySelectorAll('.tilt-card, .service-col');
-
-    tiltElements.forEach(card => {
-        card.addEventListener('mousemove', (e) => {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            
-            // Calculate center
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-            
-            // Rotation values (reduced multiplier for subtle effect)
-            const rotateX = ((y - centerY) / centerY) * -5; // Max 5 deg tilt
-            const rotateY = ((x - centerX) / centerX) * 5;
-
-            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-        });
-
-        card.addEventListener('mouseleave', () => {
-            // Reset position
-            card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg)`;
-        });
-    });
-
-
-    // --- 5. ROBOTIC AUDIO FX ---
-    // Using Web Audio API - Requires user interaction first
+    // --- 5. ROBOTIC AUDIO FX (with mute persistence) ---
     let audioContext = null;
-    let audioEnabled = false;
+    let audioReady = false;
+    const AUDIO_PREF_KEY = 'ravan-audio-enabled';
+    const storedPref = (() => {
+        try { return localStorage.getItem(AUDIO_PREF_KEY); }
+        catch { return null; }
+    })();
+    let audioEnabled = storedPref !== 'false';
 
     function initAudio() {
+        if (!audioEnabled) return;
         if (!audioContext) {
-            audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            audioEnabled = true;
+            try {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                audioReady = true;
+            } catch { /* Web Audio unsupported */ }
         } else if (audioContext.state === 'suspended') {
             audioContext.resume();
         }
     }
-
-    // Enable audio on first click anywhere
     document.body.addEventListener('click', initAudio, { once: true });
 
     function playBeep() {
-        if (!audioEnabled || !audioContext) return;
-
-        const oscillator = audioContext.createOscillator();
-        const gainNode = audioContext.createGain();
-
-        oscillator.type = 'sine';
-        // Quick pitch slide for robotic feel
-        oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
-        oscillator.frequency.exponentialRampToValueAtTime(300, audioContext.currentTime + 0.1);
-
-        gainNode.gain.setValueAtTime(0.05, audioContext.currentTime); // Low volume
-        gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.1);
-
-        oscillator.connect(gainNode);
-        gainNode.connect(audioContext.destination);
-
-        oscillator.start();
-        oscillator.stop(audioContext.currentTime + 0.1);
+        if (!audioEnabled || !audioReady || !audioContext) return;
+        const osc = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(800, audioContext.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(300, audioContext.currentTime + 0.1);
+        gain.gain.setValueAtTime(0.05, audioContext.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.1);
+        osc.connect(gain);
+        gain.connect(audioContext.destination);
+        osc.start();
+        osc.stop(audioContext.currentTime + 0.1);
     }
 
-    // Attach beep to hoverable elements
     document.querySelectorAll('.audio-hover, .tilt-card, .service-col').forEach(el => {
         el.addEventListener('mouseenter', playBeep);
     });
 
-
-    // --- EXISTING UI LOGIC (Kept from original) ---
-
-    // Mobile Menu Toggle
-    const mobileMenuBtn = document.querySelector('.mobile-menu-toggle');
-    const navLinks = document.querySelector('.nav-links');
-    
-    if(mobileMenuBtn) {
-        mobileMenuBtn.addEventListener('click', () => {
-            const isExpanded = mobileMenuBtn.getAttribute('aria-expanded') === 'true';
-            mobileMenuBtn.setAttribute('aria-expanded', !isExpanded);
-            navLinks.classList.toggle('active');
+    const audioToggle = document.getElementById('audio-toggle');
+    if (audioToggle) {
+        audioToggle.setAttribute('aria-pressed', String(audioEnabled));
+        audioToggle.title = audioEnabled ? 'Sound on (click to mute)' : 'Sound off (click to enable)';
+        audioToggle.addEventListener('click', () => {
+            audioEnabled = !audioEnabled;
+            try { localStorage.setItem(AUDIO_PREF_KEY, String(audioEnabled)); } catch { /* ignore */ }
+            audioToggle.setAttribute('aria-pressed', String(audioEnabled));
+            audioToggle.title = audioEnabled ? 'Sound on (click to mute)' : 'Sound off (click to enable)';
+            if (audioEnabled) initAudio();
         });
     }
 
-    // Tagline Rotation
+
+    // --- 6. MOBILE MENU (with Escape close + outside click) ---
+    const mobileMenuBtn = document.querySelector('.mobile-menu-toggle');
+    const navLinks = document.querySelector('.nav-links');
+
+    function closeMobileMenu() {
+        if (!navLinks || !mobileMenuBtn) return;
+        navLinks.classList.remove('active');
+        mobileMenuBtn.setAttribute('aria-expanded', 'false');
+    }
+
+    if (mobileMenuBtn && navLinks) {
+        mobileMenuBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isExpanded = mobileMenuBtn.getAttribute('aria-expanded') === 'true';
+            mobileMenuBtn.setAttribute('aria-expanded', String(!isExpanded));
+            navLinks.classList.toggle('active');
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && navLinks.classList.contains('active')) {
+                closeMobileMenu();
+                mobileMenuBtn.focus();
+            }
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!navLinks.classList.contains('active')) return;
+            if (navLinks.contains(e.target) || mobileMenuBtn.contains(e.target)) return;
+            closeMobileMenu();
+        });
+    }
+
+
+    // --- 7. ROTATING TAGLINE ---
     const taglines = [
         "Where Intelligence Dominates",
         "Systems That Think",
         "Evolution Under Pressure",
         "Data > Instinct"
     ];
-    let tagIndex = 0;
     const tagElement = document.getElementById('rotating-tagline');
-    
-    if(tagElement) {
+    if (tagElement && !prefersReducedMotion) {
+        let tagIndex = 0;
         setInterval(() => {
+            if (document.hidden) return;
             tagElement.style.opacity = '0';
             setTimeout(() => {
                 tagIndex = (tagIndex + 1) % taglines.length;
@@ -315,63 +333,154 @@ document.addEventListener('DOMContentLoaded', () => {
                 tagElement.style.opacity = '1';
             }, 500);
         }, 4000);
-        tagElement.style.transition = "opacity 0.5s ease";
     }
 
-    // 3D SCROLL ANIMATIONS (Intersection Observer)
-    const observerOptions = {
-        threshold: 0.1, 
-        rootMargin: "0px 0px -50px 0px" 
-    };
 
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('is-visible');
-                observer.unobserve(entry.target); 
-            }
-        });
-    }, observerOptions);
+    // --- 8. SCROLL REVEAL ---
+    if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
+        document.querySelectorAll('.reveal-item').forEach(el => observer.observe(el));
+    } else {
+        document.querySelectorAll('.reveal-item').forEach(el => el.classList.add('is-visible'));
+    }
 
-    document.querySelectorAll('.reveal-item').forEach(section => {
-        observer.observe(section);
-    });
 
-    // Form Submission Mock
+    // --- 9. STAT COUNTER ---
+    function animateCount(el) {
+        const target = parseInt(el.dataset.target, 10) || 0;
+        const suffix = el.dataset.suffix || '';
+        if (prefersReducedMotion) {
+            el.textContent = target + suffix;
+            return;
+        }
+        const duration = 1400;
+        const start = performance.now();
+        function step(now) {
+            const progress = Math.min((now - start) / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            el.textContent = Math.floor(target * eased) + suffix;
+            if (progress < 1) requestAnimationFrame(step);
+            else el.textContent = target + suffix;
+        }
+        requestAnimationFrame(step);
+    }
+
+    if ('IntersectionObserver' in window) {
+        const statObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateCount(entry.target);
+                    statObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+        document.querySelectorAll('.stat-number').forEach(el => statObserver.observe(el));
+    }
+
+
+    // --- 10. CONTACT FORM (validation, honeypot, mailto fallback) ---
     const form = document.getElementById('contact-form');
     const formMessage = document.getElementById('form-message');
-    
-    if(form) {
+
+    function showFormMessage(text, type) {
+        if (!formMessage) return;
+        formMessage.textContent = text;
+        formMessage.classList.remove('hidden', 'success', 'error');
+        formMessage.classList.add(type);
+        formMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    if (form) {
         form.addEventListener('submit', (e) => {
             e.preventDefault();
-            const btn = form.querySelector('button');
+
+            // Honeypot — if filled, silently drop
+            const hp = form.querySelector('[name="website"]');
+            if (hp && hp.value.trim() !== '') {
+                showFormMessage('Transmission queued.', 'success');
+                form.reset();
+                return;
+            }
+
+            // Native validation
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                showFormMessage('Please complete all required fields correctly.', 'error');
+                return;
+            }
+
+            const data = new FormData(form);
+            const name = (data.get('name') || '').toString().trim();
+            const email = (data.get('email') || '').toString().trim();
+            const budget = (data.get('budget') || '').toString().trim();
+            const message = (data.get('message') || '').toString().trim();
+
+            const btn = form.querySelector('button[type="submit"]');
             const originalText = btn.textContent;
-            btn.textContent = "Transmitting...";
+            btn.textContent = 'Transmitting…';
             btn.disabled = true;
-            
+
+            // Build a mailto fallback so the message actually leaves the browser.
+            // Replace this block with a fetch() to your form endpoint when you have one.
+            const subject = encodeURIComponent(`New project inquiry — ${name}`);
+            const body = encodeURIComponent(
+                `Name: ${name}\nEmail: ${email}\nBudget: ${budget || 'n/a'}\n\nMessage:\n${message}`
+            );
+            const mailto = `mailto:contact@ravantechnologies.com?subject=${subject}&body=${body}`;
+
             setTimeout(() => {
+                window.location.href = mailto;
                 btn.textContent = originalText;
                 btn.disabled = false;
                 form.reset();
-                formMessage.classList.remove('hidden');
-                setTimeout(() => {
-                    formMessage.classList.add('hidden');
-                }, 5000);
-            }, 1500);
+                showFormMessage(
+                    'Transmission ready. Your email client should now open — if not, email us directly at contact@ravantechnologies.com.',
+                    'success'
+                );
+            }, 600);
         });
     }
 
-    // Smooth Scroll
+
+    // --- 11. SMOOTH SCROLL (null-safe) ---
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
+            const href = this.getAttribute('href');
+            if (!href || href === '#') return;
+            const target = document.querySelector(href);
+            if (!target) return; // fall through to default if anchor doesn't exist
             e.preventDefault();
-            document.querySelector(this.getAttribute('href')).scrollIntoView({
-                behavior: 'smooth'
-            });
-            if(navLinks.classList.contains('active')) {
-                navLinks.classList.remove('active');
-                mobileMenuBtn.setAttribute('aria-expanded', 'false');
-            }
+            target.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+            if (navLinks && navLinks.classList.contains('active')) closeMobileMenu();
         });
     });
+
+
+    // --- 12. ACTIVE NAV LINK ON SCROLL ---
+    const sections = document.querySelectorAll('main section[id]');
+    const navAnchors = document.querySelectorAll('.nav-links a[href^="#"]');
+    if (sections.length && navAnchors.length && 'IntersectionObserver' in window) {
+        const navObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                const id = entry.target.id;
+                navAnchors.forEach(a => {
+                    a.classList.toggle('active', a.getAttribute('href') === `#${id}`);
+                });
+            });
+        }, { rootMargin: '-40% 0px -55% 0px' });
+        sections.forEach(s => navObserver.observe(s));
+    }
+
+
+    // --- 13. AUTO-UPDATE FOOTER YEAR ---
+    const yearEl = document.getElementById('footer-year');
+    if (yearEl) yearEl.textContent = new Date().getFullYear();
 });
