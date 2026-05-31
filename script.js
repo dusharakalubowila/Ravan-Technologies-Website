@@ -483,4 +483,137 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 13. AUTO-UPDATE FOOTER YEAR ---
     const yearEl = document.getElementById('footer-year');
     if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+
+    /* ============================================================
+       ░░ WOW-FACTOR ADDITIONS ░░
+       ============================================================ */
+
+    // --- 14. PAGE LOADER ---
+    const loader = document.getElementById('page-loader');
+    if (loader) {
+        document.body.style.overflow = 'hidden';
+        setTimeout(() => {
+            loader.classList.add('fade-out');
+            document.body.style.overflow = '';
+        }, 2600);
+    }
+
+
+    // --- 15. SCROLL PROGRESS BAR ---
+    const progressBar = document.getElementById('scroll-progress');
+    if (progressBar) {
+        const updateProgress = () => {
+            const total    = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = total > 0 ? (window.scrollY / total) * 100 : 0;
+            progressBar.style.width = progress + '%';
+        };
+        window.addEventListener('scroll', updateProgress, { passive: true });
+    }
+
+
+    // --- 16. HEADER SCROLLED STATE ---
+    const header = document.getElementById('main-header');
+    if (header) {
+        window.addEventListener('scroll', () => {
+            header.classList.toggle('scrolled', window.scrollY > 30);
+        }, { passive: true });
+    }
+
+
+    // --- 17. MOUSE SPOTLIGHT ---
+    window.addEventListener('mousemove', (e) => {
+        document.documentElement.style.setProperty('--mouse-x', e.clientX + 'px');
+        document.documentElement.style.setProperty('--mouse-y', e.clientY + 'px');
+    }, { passive: true });
+
+
+    // --- 18. CUSTOM CURSOR (hover-capable devices only) ---
+    if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+        const cursorDot  = document.getElementById('cursor-dot');
+        const cursorRing = document.getElementById('cursor-ring');
+
+        if (cursorDot && cursorRing) {
+            let mouseX = window.innerWidth / 2,  mouseY = window.innerHeight / 2;
+            let ringX  = mouseX, ringY  = mouseY;
+
+            // Dot: instant
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX; mouseY = e.clientY;
+                cursorDot.style.left = mouseX + 'px';
+                cursorDot.style.top  = mouseY + 'px';
+            }, { passive: true });
+
+            // Ring: lerp (smooth lag)
+            const lerpFactor = 0.1;
+            (function lerp() {
+                ringX += (mouseX - ringX) * lerpFactor;
+                ringY += (mouseY - ringY) * lerpFactor;
+                cursorRing.style.left = ringX + 'px';
+                cursorRing.style.top  = ringY + 'px';
+                requestAnimationFrame(lerp);
+            })();
+
+            // States on interactive elements
+            const interactEls = document.querySelectorAll(
+                'a, button, .tilt-card, .service-col, .portfolio-card, .phil-card, .process-step, .mindset-item, .stat'
+            );
+            interactEls.forEach(el => {
+                el.addEventListener('mouseenter', () => cursorRing.classList.add('is-hovering'));
+                el.addEventListener('mouseleave', () => cursorRing.classList.remove('is-hovering'));
+            });
+
+            document.addEventListener('mousedown', () => cursorRing.classList.add('is-clicking'));
+            document.addEventListener('mouseup',   () => cursorRing.classList.remove('is-clicking'));
+        }
+    }
+
+
+    // --- 19. MAGNETIC BUTTONS ---
+    if (!prefersReducedMotion && window.matchMedia('(hover: hover)').matches) {
+        document.querySelectorAll('.btn-magnetic').forEach(btn => {
+            btn.addEventListener('mousemove', (e) => {
+                const rect = btn.getBoundingClientRect();
+                const x = ((e.clientX - rect.left) / rect.width  - 0.5) * 18;
+                const y = ((e.clientY - rect.top)  / rect.height - 0.5) * 18;
+                btn.style.transform = `translate(${x}px, ${y}px)`;
+            });
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transform = '';
+            });
+        });
+    }
+
+
+    // --- 20. HERO CANVAS PARALLAX ---
+    if (!prefersReducedMotion) {
+        const vortex = document.getElementById('vortexCanvas');
+        let rafPending = false;
+        window.addEventListener('scroll', () => {
+            if (!rafPending) {
+                rafPending = true;
+                requestAnimationFrame(() => {
+                    if (vortex) vortex.style.transform = `translateY(${window.scrollY * 0.4}px)`;
+                    rafPending = false;
+                });
+            }
+        }, { passive: true });
+    }
+
+
+    // --- 21. STAT GLOW ON COUNTER COMPLETE ---
+    // Patch the existing animateCount to fire glow when done
+    const statEls = document.querySelectorAll('.stat-number');
+    statEls.forEach(el => {
+        const observer = new MutationObserver(() => {
+            const target = parseInt(el.dataset.target, 10) || 0;
+            const suffix = el.dataset.suffix || '';
+            if (el.textContent === target + suffix) {
+                el.classList.add('count-done');
+                observer.disconnect();
+            }
+        });
+        observer.observe(el, { childList: true, characterData: true, subtree: true });
+    });
+
 });
