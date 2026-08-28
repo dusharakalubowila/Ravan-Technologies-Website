@@ -797,6 +797,12 @@ h1, h2, h3, h4 {
     cursor: pointer;
 }
 
+/* Dropdown option list: readable on open, independent of the closed control's styling */
+.form-group select option {
+    background-color: #000000;
+    color: #ffffff;
+}
+
 .form-group input:focus,
 .form-group textarea:focus,
 .form-group select:focus {
